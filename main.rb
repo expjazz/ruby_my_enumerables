@@ -2,9 +2,11 @@ module Enumerable
   # rubocop:disable Metrics/PerceivedComplexity
 
   def my_each
+    i = 0
     if block_given?
-      (0...size).each do |i|
+      while i <= length - 1
         yield(self[i])
+        i += 1
       end
       return self
     end
@@ -12,9 +14,11 @@ module Enumerable
   end
 
   def my_each_with_index
+    i = 0
     if block_given?
-      (0...size).each do |i|
+      while i <= length - 1
         yield(self[i], i)
+        i += 1
       end
       return self
     end
@@ -22,9 +26,9 @@ module Enumerable
   end
 
   def my_select
+    arr = []
     return to_enum if block_given? == false
 
-    arr = []
     my_each { |x| arr << x if yield(x) == true }
     arr
   end
@@ -73,22 +77,15 @@ module Enumerable
 
     if num_1.nil?
       my_each_with_index do |_ele, ind|
-        self[0] = prc.call(self[0], self[ind + 1]) if ind < size - 1
+        self[0] = prc.call(self[0], self[ind + 1]) if ind < length - 1
       end
     else
       my_each_with_index do |_ele, ind|
-        if ind.zero?
-          self[0] = prc.call(num_1, self[0])
-        elsif ind.positive?
-          self[0] = prc.call(self[0], self[ind])
-        end
+        self[0] = prc.call(num_1, self[0]) if ind.zero?
+        self[0] = prc.call(self[0], self[ind]) if ind.positive?
       end
     end
     self[0]
   end
 end
-
 # rubocop:enable Metrics/PerceivedComplexity
-def multiply_els(array)
-  array.my_inject { |acc, x| acc * x }
-end

@@ -12,6 +12,17 @@ module Enumerable
         end
         self
     end
-    
+    def my_select
+        arr = []
+        self.my_each{|x| arr << x if yield(x) == true}
+        arr
+    end
+    def my_all?
+        self.my_each{|x| return false if yield(x) == false}
+        return true
+    end
 end
 
+a = [2, 4, 6, 8, 9].my_all?{|x| x.even?}
+
+p a

@@ -67,17 +67,17 @@ module Enumerable
 
   def my_none?(arg = nil, &prc)
     if block_given?
-      my_each { |x| return false if prc.call(x) == true }
+      my_each { |x| return false if prc.call(x) }
     elsif arg.is_a?(Regexp)
       my_each { |x| return false if arg.match?(x.to_s) == true }
     elsif arg.is_a?(Class)
-      my_each { |x| return false if x.is_a?(arg) == true }
+      my_each { |x| return false if x.is_a?(arg) }
     elsif arg.nil? == false
       my_each { |x| return false if x == arg }
     else
-      my_each { |x| return false if x.nil? == false }
+      my_each { |x| return false if x }
     end
-    true
+    true  
   end
 
   def my_count(arg = nil, &prc)
@@ -137,24 +137,15 @@ end
 # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
 def multiply_els(array)
-  array.my_inject{ |product, n| product - n }
+  array.my_inject{ |product, n| product * n }
 end
 
 # test cases that were corrected thanks to the preview help from tse
-
-p [1, false, 'hi', []].my_all? == false
-p [1, 2, 3].my_any? == true
-p [1, 2, nil].my_any? == true
-p [false, false, nil].my_any? == false
-p [1, 2, 3].my_any?(Integer) == true
-p [1, 'demo', false].my_any?(Integer) == true
-p ['demo', false, nil].my_any?(Integer) == false
-p %w[dog door rod blade].my_any?(/t/)  == false
-p %w[dog door rod blade].my_any?(/d/) == true
-p [1, 2, 3].my_any?(3) == true
-p [1, 2, 2].my_any?(3) == false
-
-array = [1, 2, 3, 4, 5]
-operation = proc { |sum, n| sum + n }
-p array.my_inject(&operation)
-p (1...50).inject (4) { |prod, n| prod * n }
+p [false, nil].my_none? == true
+p (5..10).my_inject { |sum, n| sum + n } == 45
+p (5..10).my_inject { |sum, n| sum * n } == 151200
+p (5..10).my_inject(:+) == 45
+p (5..10).my_inject(2, :+) == 47
+p (5..10).my_inject(:*) == 151200
+p (5..10).my_inject(2, :*) == 302400
+p [false, nil].my_none? == true

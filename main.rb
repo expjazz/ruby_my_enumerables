@@ -139,13 +139,3 @@ end
 def multiply_els(array)
   array.my_inject{ |product, n| product * n }
 end
-
-# test cases that were corrected thanks to the preview help from tse
-p [false, nil].my_none? == true
-p (5..10).my_inject { |sum, n| sum + n } == 45
-p (5..10).my_inject { |sum, n| sum * n } == 151200
-p (5..10).my_inject(:+) == 45
-p (5..10).my_inject(2, :+) == 47
-p (5..10).my_inject(:*) == 151200
-p (5..10).my_inject(2, :*) == 302400
-p [false, nil].my_none? == true
